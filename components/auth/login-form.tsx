@@ -65,11 +65,9 @@ export function LoginForm() {
       <div className="w-full max-w-md">
         {/* Header */}
         <GSAPFadeIn delay={0.1}>
-          <div className="text-center mb-12">
-            <h1 className="font-serif text-3xl font-bold text-black mb-3">Devnovate</h1>
-            <p className="text-gray-600">Developer blogging platform</p>
-            <h2 className="font-serif text-2xl font-semibold text-black mt-8 mb-3">Welcome Back</h2>
-            <p className="text-gray-600">Sign in to your Devnovate account</p>
+          <div className="text-center mb-8">
+            <h2 className="font-serif text-2xl font-semibold text-black mb-3">Welcome Back</h2>
+            <p className="text-gray-600">Sign in to your account</p>
           </div>
         </GSAPFadeIn>
 
