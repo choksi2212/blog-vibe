@@ -5,7 +5,7 @@ const dbName = "devnovate_blog"
 const dbRef = db.getSiblingDB(dbName)
 
 // Provided UID from the user
-const ADMIN_UID = "R1130b5kuzQAzFOi2Wj4xlNoHFN2"
+const ADMIN_UID = "UJZk9Uvv2RejjOiomqx9ppz3seG2"
 
 const now = new Date()
 
