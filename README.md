@@ -1,4 +1,4 @@
-# 🚀 Devnovate Blog Platform
+# <div align="center">🚀 Devnovate Blog Platform </div>
 
 <div align="center">
   <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js" alt="Next.js">
