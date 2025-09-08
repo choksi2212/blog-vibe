@@ -97,32 +97,32 @@
 
 ```mermaid
 graph TB
-    subgraph "Client Layer"
+    subgraph Client["Client Layer"]
         A[Next.js Frontend]
         B[React Components]
         C[Tailwind CSS]
     end
     
-    subgraph "Authentication"
+    subgraph Auth["Authentication"]
         D[Firebase Auth]
         E[JWT Tokens]
         F[Google OAuth]
     end
     
-    subgraph "API Layer"
+    subgraph API["API Layer"]
         G[Next.js API Routes]
         H[Express Backend]
         I[Middleware]
     end
     
-    subgraph "Business Logic"
+    subgraph Business["Business Logic"]
         J[User Management]
         K[Content Management]
         L[Admin Controls]
         M[Email Service]
     end
     
-    subgraph "Data Layer"
+    subgraph Data["Data Layer"]
         N[MongoDB Atlas]
         O[Firebase Admin]
         P[SMTP Service]
@@ -167,7 +167,7 @@ sequenceDiagram
     F->>FB: Verify Auth Token
     FB-->>F: Token Valid
     F->>A: POST /api/blogs
-    A->>DB: Insert Blog (status: pending)
+    A->>DB: Insert Blog (status pending)
     DB-->>A: Blog Created
     A->>E: Notify Admin
     A-->>F: Success Response
@@ -175,7 +175,7 @@ sequenceDiagram
     
     Note over U,E: Admin Approval Flow
     U->>F: Admin Reviews Blog
-    F->>A: PATCH /api/admin/blogs/:id
+    F->>A: PATCH /api/admin/blogs/id
     A->>DB: Update Blog Status
     A->>E: Notify Author
     A-->>F: Status Updated
@@ -233,19 +233,19 @@ erDiagram
         string uid PK
         string email UK
         string role
-        object profile
+        string profile
         date createdAt
         date updatedAt
     }
     
     Blogs {
-        objectId _id PK
+        string id PK
         string title
-        text content
+        string content
         string excerpt
-        array tags
+        string tags
         string authorId FK
-        enum status
+        string status
         int views
         int likes
         int comments
@@ -254,27 +254,27 @@ erDiagram
     }
     
     Comments {
-        objectId _id PK
+        string id PK
         string content
         string authorId FK
         string blogId FK
-        object author
+        string author
         date createdAt
     }
     
     Likes {
-        objectId _id PK
+        string id PK
         string blogId FK
         string userId FK
         date createdAt
     }
     
     Analytics {
-        objectId _id PK
+        string id PK
         string blogId FK
         string event
         string userId FK
-        object metadata
+        string metadata
         date timestamp
     }
 ```
@@ -794,9 +794,9 @@ graph TD
     A[E2E Tests] --> B[Integration Tests]
     B --> C[Unit Tests]
     
-    A1[Cypress/Playwright<br/>User Journeys] --> A
-    B1[API Tests<br/>Database Tests] --> B
-    C1[Component Tests<br/>Utility Tests] --> C
+    A1["Cypress/Playwright<br/>User Journeys"] --> A
+    B1["API Tests<br/>Database Tests"] --> B
+    C1["Component Tests<br/>Utility Tests"] --> C
     
     style C fill:#c8e6c9
     style B fill:#fff9c4
@@ -832,9 +832,9 @@ graph LR
     G --> I[Database Connection]
     I --> J[MongoDB Atlas]
     
-    style F fill:#000000,color:#ffffff
-    style G fill:#8B5CF6,color:#ffffff
-    style J fill:#4db33d,color:#ffffff
+    style F fill:#000000
+    style G fill:#8B5CF6
+    style J fill:#4db33d
 ```
 
 ### 📋 Deployment Checklist
