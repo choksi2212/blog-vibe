@@ -171,7 +171,7 @@ export default function SearchPage() {
                         className="cursor-pointer"
                         onClick={() => handleTagClick(tag)}
                       >
-                        #{tag} ×
+                        {tag} ×
                       </Badge>
                     ))}
                     {filters.author && <Badge variant="outline">Author: {filters.author}</Badge>}
@@ -231,7 +231,7 @@ export default function SearchPage() {
                       className="cursor-pointer"
                       onClick={() => handleTagClick(tag)}
                     >
-                      #{tag}
+                      {tag}
                     </Badge>
                   ))}
                 </div>

@@ -184,7 +184,7 @@ export function SearchAutocomplete({
                         <ClientOnly fallback={<div className="w-4 h-4" />}>
                           {getIcon(suggestion.type)}
                         </ClientOnly>
-                        <span className="flex-1">#{suggestion.text}</span>
+                        <span className="flex-1">{suggestion.text}</span>
                         {suggestion.count && (
                           <Badge variant="secondary" className="text-xs">
                             {suggestion.count} posts

@@ -1,13 +1,29 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useAuth } from "@/components/auth/auth-provider"
-import { BlogCard } from "@/components/blog/blog-card"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useToast } from "@/hooks/use-toast"
-import { Plus, FileText, Clock, CheckCircle, XCircle } from "lucide-react"
+import React, { useState, useEffect, useMemo } from 'react'
+import { useAuth } from '@/components/auth/auth-provider'
+import { useRouter } from 'next/navigation'
+import { useToast } from '@/hooks/use-toast'
+import { 
+  FileText, 
+  Eye, 
+  Clock, 
+  CheckCircle, 
+  XCircle, 
+  Edit, 
+  Trash2, 
+  Plus,
+  Loader2,
+  TrendingUp,
+  Heart,
+  MessageCircle
+} from 'lucide-react'
+import { 
+  GSAPMetricCard, 
+  GSAPStatusBadge, 
+  GSAPLoadingSpinner,
+  GSAPFadeIn 
+} from '@/components/ui/gsap-animations'
 import Link from "next/link"
 
 interface Blog {
@@ -31,8 +47,13 @@ interface Blog {
 export function UserDashboard() {
   const [blogs, setBlogs] = useState<Blog[]>([])
   const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState('all')
   const { user } = useAuth()
   const { toast } = useToast()
+
+  const totalViews = useMemo(() => blogs.reduce((sum, blog) => sum + (blog.views || 0), 0), [blogs])
+  const totalLikes = useMemo(() => blogs.reduce((sum, blog) => sum + (blog.likes || 0), 0), [blogs])
+  const totalComments = useMemo(() => blogs.reduce((sum, blog) => sum + (blog.comments || 0), 0), [blogs])
 
   useEffect(() => {
     if (user) {
@@ -110,97 +131,129 @@ export function UserDashboard() {
   const stats = getStats()
 
   if (loading) {
-    return <div className="flex justify-center p-8">Loading...</div>
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <GSAPLoadingSpinner size="lg" className="mx-auto mb-4" />
+          <p className="text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold">My Dashboard</h1>
-          <p className="text-muted-foreground">Manage your blog posts</p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <GSAPFadeIn delay={0.1}>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+            <div className="mb-4 sm:mb-0">
+              <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-black mb-2">My Dashboard</h1>
+              <p className="text-gray-600">Manage your blog posts and track performance</p>
+            </div>
+            <Link href="/dashboard/create">
+              <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors flex items-center gap-2">
+                <Plus className="w-4 h-4" />
+                New Blog Post
+              </button>
+            </Link>
+          </div>
+        </GSAPFadeIn>
+
+        {/* Stats Cards */}
+        <GSAPFadeIn delay={0.2}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <GSAPMetricCard
+              title="Total Posts"
+              value={stats.total}
+              className="flex-1"
+              delay={0.1}
+            />
+            <GSAPMetricCard
+              title="Published"
+              value={stats.published}
+              trend="up"
+              className="flex-1"
+              delay={0.2}
+            />
+            <GSAPMetricCard
+              title="Pending Review"
+              value={stats.pending}
+              trend="neutral"
+              className="flex-1"
+              delay={0.3}
+            />
+            <GSAPMetricCard
+              title="Drafts"
+              value={stats.drafts}
+              trend="neutral"
+              className="flex-1"
+              delay={0.4}
+            />
+          </div>
+        </GSAPFadeIn>
+
+        {/* Performance Metrics */}
+        <GSAPFadeIn delay={0.6}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <GSAPMetricCard
+              title="Total Views"
+              value={totalViews}
+              trend="up"
+              change={12}
+              className="flex-1"
+              delay={0.1}
+            />
+            <GSAPMetricCard
+              title="Total Likes"
+              value={totalLikes}
+              trend="up"
+              change={8}
+              className="flex-1"
+              delay={0.2}
+            />
+            <GSAPMetricCard
+              title="Total Comments"
+              value={totalComments}
+              trend="up"
+              change={15}
+              className="flex-1"
+              delay={0.3}
+            />
+          </div>
+        </GSAPFadeIn>
+
+        {/* Blog Posts Tabs */}
+        <div className="bg-white border border-gray-200">
+          <div className="border-b border-gray-200">
+            <nav className="flex space-x-8 px-6" aria-label="Tabs">
+              {[
+                { key: 'all', label: `All (${stats.total})`, count: stats.total },
+                { key: 'published', label: `Published (${stats.published})`, count: stats.published },
+                { key: 'pending', label: `Pending (${stats.pending})`, count: stats.pending },
+                { key: 'draft', label: `Drafts (${stats.drafts})`, count: stats.drafts },
+                { key: 'rejected', label: `Rejected (${stats.rejected})`, count: stats.rejected }
+              ].map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                    activeTab === tab.key
+                      ? 'border-black text-black'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          <div className="p-6">
+            <BlogGrid blogs={filterBlogs(activeTab === 'all' ? undefined : activeTab)} onDelete={handleDeleteBlog} />
+          </div>
         </div>
-        <Link href="/dashboard/create">
-          <Button className="flex items-center gap-2">
-            <Plus className="w-4 h-4" />
-            New Blog Post
-          </Button>
-        </Link>
       </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Posts</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Published</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.published}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Drafts</CardTitle>
-            <XCircle className="h-4 w-4 text-gray-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-600">{stats.drafts}</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Blog Posts Tabs */}
-      <Tabs defaultValue="all" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="all">All ({stats.total})</TabsTrigger>
-          <TabsTrigger value="published">Published ({stats.published})</TabsTrigger>
-          <TabsTrigger value="pending">Pending ({stats.pending})</TabsTrigger>
-          <TabsTrigger value="draft">Drafts ({stats.drafts})</TabsTrigger>
-          <TabsTrigger value="rejected">Rejected ({stats.rejected})</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="all" className="mt-6">
-          <BlogGrid blogs={filterBlogs()} onDelete={handleDeleteBlog} />
-        </TabsContent>
-
-        <TabsContent value="published" className="mt-6">
-          <BlogGrid blogs={filterBlogs("published")} onDelete={handleDeleteBlog} />
-        </TabsContent>
-
-        <TabsContent value="pending" className="mt-6">
-          <BlogGrid blogs={filterBlogs("pending")} onDelete={handleDeleteBlog} />
-        </TabsContent>
-
-        <TabsContent value="draft" className="mt-6">
-          <BlogGrid blogs={filterBlogs("draft")} onDelete={handleDeleteBlog} />
-        </TabsContent>
-
-        <TabsContent value="rejected" className="mt-6">
-          <BlogGrid blogs={filterBlogs("rejected")} onDelete={handleDeleteBlog} />
-        </TabsContent>
-      </Tabs>
     </div>
   )
 }
@@ -208,24 +261,88 @@ export function UserDashboard() {
 function BlogGrid({ blogs, onDelete }: { blogs: Blog[]; onDelete: (id: string) => void }) {
   if (blogs.length === 0) {
     return (
-      <div className="text-center py-12">
-        <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-        <h3 className="text-lg font-medium mb-2">No blog posts found</h3>
-        <p className="text-muted-foreground">Start writing your first blog post!</p>
+      <div className="text-center py-16">
+        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <FileText className="w-8 h-8 text-gray-400" />
+        </div>
+        <h3 className="font-serif text-xl font-medium text-gray-900 mb-2">No blog posts found</h3>
+        <p className="text-gray-500 mb-6">Start writing your first blog post to see it here!</p>
+        <Link href="/dashboard/create">
+          <button className="bg-black text-white px-6 py-3 text-sm font-medium hover:bg-gray-800 transition-colors">
+            Create Your First Post
+          </button>
+        </Link>
       </div>
     )
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
       {blogs.map((blog) => (
-        <BlogCard
-          key={blog._id}
-          blog={blog}
-          showActions
-          onEdit={() => (window.location.href = `/dashboard/edit/${blog._id}`)}
-          onDelete={() => onDelete(blog._id)}
-        />
+        <div key={blog._id} className="bg-white border border-gray-200 hover:shadow-sm transition-shadow">
+          <div className="p-6">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <h3 className="font-serif text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                  {blog.title}
+                </h3>
+                <p className="text-gray-600 text-sm mb-3 line-clamp-3">
+                  {blog.excerpt}
+                </p>
+              </div>
+              <GSAPStatusBadge status={blog.status} className="ml-4" delay={0.5} />
+            </div>
+            
+            <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+              <div className="flex items-center space-x-4">
+                <span className="flex items-center">
+                  <Eye className="w-4 h-4 mr-1" />
+                  {blog.views || 0}
+                </span>
+                <span className="flex items-center">
+                  <Heart className="w-4 h-4 mr-1" />
+                  {blog.likes || 0}
+                </span>
+              </div>
+              <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div className="flex flex-wrap gap-1">
+                {blog.tags.slice(0, 2).map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2 py-1 bg-gray-100 text-gray-700 text-xs"
+                  >
+                    {tag}
+                  </span>
+                ))}
+                {blog.tags.length > 2 && (
+                  <span className="px-2 py-1 bg-gray-100 text-gray-500 text-xs">
+                    +{blog.tags.length - 2} more
+                  </span>
+                )}
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => (window.location.href = `/dashboard/edit/${blog._id}`)}
+                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                  title="Edit"
+                >
+                  <Edit className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => onDelete(blog._id)}
+                  className="p-2 text-gray-400 hover:text-red-600 transition-colors"
+                  title="Delete"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       ))}
     </div>
   )

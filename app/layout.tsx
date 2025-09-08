@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { AuthProvider } from "@/components/auth/auth-provider"
 import { ClientOnly } from "@/components/ui/client-only"
+import { PerformanceIndicator } from "@/components/ui/performance-monitor"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
@@ -87,6 +88,7 @@ export default function RootLayout({
             <AuthProvider>{children}</AuthProvider>
           </Suspense>
         </ClientOnly>
+        <PerformanceIndicator />
         <Analytics />
       </body>
     </html>

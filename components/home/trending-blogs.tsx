@@ -57,19 +57,23 @@ export function TrendingBlogs() {
   }
 
   return (
-    <section className="py-16 px-4">
-      <div className="container mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <TrendingUp className="w-6 h-6 text-primary" />
-            <h2 className="text-3xl font-bold">Trending This Week</h2>
+    <section className="py-20 px-4 bg-white">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <TrendingUp className="w-6 h-6 text-black" />
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-black">
+              Trending This Week
+            </h2>
           </div>
-          <Link href="/blogs">
-            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
-              View All
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </Link>
+          <div className="flex justify-center">
+            <Link href="/blogs">
+              <Button variant="outline" className="flex items-center gap-2 bg-transparent border-black text-black hover:bg-black hover:text-white">
+                View All
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {blogs.length > 0 ? (

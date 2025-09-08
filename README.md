@@ -7,11 +7,12 @@
   <img src="https://img.shields.io/badge/Firebase-Auth-orange?style=for-the-badge&logo=firebase" alt="Firebase">
   <img src="https://img.shields.io/badge/Express.js-4-lightgrey?style=for-the-badge&logo=express" alt="Express">
   <img src="https://img.shields.io/badge/Tailwind-CSS-blue?style=for-the-badge&logo=tailwindcss" alt="Tailwind">
+  <img src="https://img.shields.io/badge/GSAP-Animations-green?style=for-the-badge&logo=greensock" alt="GSAP">
 </div>
 
 <div align="center">
   <h3>🏆 A Modern, Full-Stack Blogging Platform for Developers</h3>
-  <p><em>Empowering developers to share knowledge, build community, and accelerate innovation</em></p>
+  <p><em>Empowering developers to share knowledge, build community, and accelerate innovation with stunning animations and seamless user experience</em></p>
 </div>
 
 ---
@@ -25,7 +26,9 @@
 - **Content Quality Control**: Automated admin approval system ensures high-quality technical content
 - **Community Building**: Integrated engagement features foster meaningful developer discussions
 - **Knowledge Sharing**: Streamlined publishing workflow encourages knowledge dissemination
-- **Performance**: Optimized for speed with caching, lazy loading, and efficient data fetching
+- **Performance**: Optimized for speed with GSAP animations, caching, lazy loading, and efficient data fetching
+- **User Experience**: Stunning animations and micro-interactions create an engaging platform
+- **Accessibility**: WCAG 2.1 compliant with comprehensive legal pages and data protection
 
 ### 🎯 Target Audience
 
@@ -55,6 +58,8 @@
 - ✅ Tagging and categorization system
 - ✅ SEO-optimized content structure
 - ✅ Auto-generated excerpts
+- ✅ GSAP-powered smooth transitions
+- ✅ Interactive blog cards with hover effects
 
 </td>
 <td width="50%">
@@ -72,6 +77,8 @@
 - ✅ Database indexing strategy
 - ✅ Image optimization
 - ✅ Caching implementation
+- ✅ GSAP-optimized animations
+- ✅ Performance monitoring components
 
 </td>
 </tr>
@@ -79,17 +86,21 @@
 
 ### 📱 User Experience
 - ✅ Responsive design (mobile-first)
-- ✅ Dark/light theme support
-- ✅ Progressive loading
+- ✅ Clean black & white minimalist theme
+- ✅ Progressive loading with GSAP animations
 - ✅ Accessibility compliance (WCAG 2.1)
-- ✅ Smooth animations and transitions
+- ✅ Smooth micro-interactions and transitions
+- ✅ Comprehensive legal pages (Privacy, Terms, Cookies, etc.)
+- ✅ GDPR-compliant data request system
 
 ### 🔍 Discovery & Engagement
-- ✅ Advanced search functionality
-- ✅ Trending blogs algorithm
+- ✅ Advanced search functionality with autocomplete
+- ✅ Trending blogs algorithm with centered layout
 - ✅ Comment system with notifications
 - ✅ Like/unlike functionality
 - ✅ Social sharing capabilities
+- ✅ Animated testimonials section
+- ✅ Interactive hover effects on cards
 
 ---
 
@@ -97,32 +108,32 @@
 
 ```mermaid
 graph TB
-    subgraph "Client Layer"
+    subgraph Client["Client Layer"]
         A[Next.js Frontend]
         B[React Components]
         C[Tailwind CSS]
     end
     
-    subgraph "Authentication"
+    subgraph Auth["Authentication"]
         D[Firebase Auth]
         E[JWT Tokens]
         F[Google OAuth]
     end
     
-    subgraph "API Layer"
+    subgraph API["API Layer"]
         G[Next.js API Routes]
         H[Express Backend]
         I[Middleware]
     end
     
-    subgraph "Business Logic"
+    subgraph Business["Business Logic"]
         J[User Management]
         K[Content Management]
         L[Admin Controls]
         M[Email Service]
     end
     
-    subgraph "Data Layer"
+    subgraph Data["Data Layer"]
         N[MongoDB Atlas]
         O[Firebase Admin]
         P[SMTP Service]
@@ -167,7 +178,7 @@ sequenceDiagram
     F->>FB: Verify Auth Token
     FB-->>F: Token Valid
     F->>A: POST /api/blogs
-    A->>DB: Insert Blog (status: pending)
+    A->>DB: Insert Blog (status pending)
     DB-->>A: Blog Created
     A->>E: Notify Admin
     A-->>F: Success Response
@@ -175,7 +186,7 @@ sequenceDiagram
     
     Note over U,E: Admin Approval Flow
     U->>F: Admin Reviews Blog
-    F->>A: PATCH /api/admin/blogs/:id
+    F->>A: PATCH /api/admin/blogs/id
     A->>DB: Update Blog Status
     A->>E: Notify Author
     A-->>F: Status Updated
@@ -190,10 +201,11 @@ sequenceDiagram
 ```typescript
 Framework     → Next.js 15 (App Router)
 Language      → TypeScript 5.x
-Styling       → Tailwind CSS + Headless UI
-Components    → Radix UI + Custom Components
+Styling       → Tailwind CSS + Custom Components
+UI Library    → Radix UI + Shadcn/ui Components
+Animations    → GSAP (GreenSock Animation Platform)
 State         → React Context + Hooks
-Authentication → Firebase Auth
+Authentication → Firebase Auth + Google OAuth
 ```
 
 ### ⚙️ Backend
@@ -233,19 +245,19 @@ erDiagram
         string uid PK
         string email UK
         string role
-        object profile
+        string profile
         date createdAt
         date updatedAt
     }
     
     Blogs {
-        objectId _id PK
+        string id PK
         string title
-        text content
+        string content
         string excerpt
-        array tags
+        string tags
         string authorId FK
-        enum status
+        string status
         int views
         int likes
         int comments
@@ -254,27 +266,27 @@ erDiagram
     }
     
     Comments {
-        objectId _id PK
+        string id PK
         string content
         string authorId FK
         string blogId FK
-        object author
+        string author
         date createdAt
     }
     
     Likes {
-        objectId _id PK
+        string id PK
         string blogId FK
         string userId FK
         date createdAt
     }
     
     Analytics {
-        objectId _id PK
+        string id PK
         string blogId FK
         string event
         string userId FK
-        object metadata
+        string metadata
         date timestamp
     }
 ```
@@ -344,8 +356,8 @@ git clone https://github.com/yourusername/devnovate-blog.git
 cd devnovate-blog
 
 # 2. Install dependencies
-pnpm install
-cd backend && pnpm install && cd ..
+npm install --legacy-peer-deps
+cd backend && npm install --legacy-peer-deps && cd ..
 
 # 3. Setup environment variables
 cp .env.example .env.local
@@ -671,17 +683,18 @@ const optimizations = {
 
 ## 🎨 UI/UX Design
 
-### 🎭 Design System
+### 🎨 Design System
 
 ```css
-/* Color Palette */
+/* Color Palette - Minimalist Black & White Theme */
 :root {
-  --primary: oklch(0.45 0.15 160);      /* Emerald */
-  --secondary: oklch(0.55 0.12 160);    /* Light Emerald */
+  --primary: oklch(0 0 0);              /* Black */
+  --secondary: oklch(0.15 0 0);         /* Dark Gray */
   --background: oklch(1 0 0);           /* White */
-  --foreground: oklch(0.35 0 0);        /* Dark Gray */
-  --muted: oklch(0.97 0 0);             /* Light Gray */
-  --accent: oklch(0.55 0.12 160);       /* Accent Green */
+  --foreground: oklch(0.15 0 0);        /* Dark Gray */
+  --muted: oklch(0.95 0 0);             /* Light Gray */
+  --accent: oklch(0 0 0);               /* Black Accent */
+  --border: oklch(0.9 0 0);             /* Light Border */
 }
 ```
 
@@ -794,9 +807,9 @@ graph TD
     A[E2E Tests] --> B[Integration Tests]
     B --> C[Unit Tests]
     
-    A1[Cypress/Playwright<br/>User Journeys] --> A
-    B1[API Tests<br/>Database Tests] --> B
-    C1[Component Tests<br/>Utility Tests] --> C
+    A1["Cypress/Playwright<br/>User Journeys"] --> A
+    B1["API Tests<br/>Database Tests"] --> B
+    C1["Component Tests<br/>Utility Tests"] --> C
     
     style C fill:#c8e6c9
     style B fill:#fff9c4
@@ -832,9 +845,9 @@ graph LR
     G --> I[Database Connection]
     I --> J[MongoDB Atlas]
     
-    style F fill:#000000,color:#ffffff
-    style G fill:#8B5CF6,color:#ffffff
-    style J fill:#4db33d,color:#ffffff
+    style F fill:#000000
+    style G fill:#8B5CF6
+    style J fill:#4db33d
 ```
 
 ### 📋 Deployment Checklist
@@ -883,11 +896,12 @@ graph LR
 <td width="50%">
 
 ### 💡 User Experience
-- **Intuitive Design**: Mobile-first, accessible UI
-- **Smart Features**: Auto-excerpts, trending algorithm
+- **Intuitive Design**: Mobile-first, accessible UI with GSAP animations
+- **Smart Features**: Auto-excerpts, trending algorithm, search autocomplete
 - **Real-time**: Live notifications and updates
-- **Personalization**: Role-based experiences
-- **Community**: Engagement-focused features
+- **Personalization**: Role-based experiences with Google OAuth
+- **Community**: Engagement-focused features with testimonials
+- **Legal Compliance**: Comprehensive legal pages and GDPR support
 
 </td>
 </tr>
@@ -921,13 +935,15 @@ const impactMetrics = {
 ### 🏅 Competitive Advantages
 
 1. **🎯 Developer-Focused**: Built by developers, for developers
-2. **⚡ Performance-First**: Optimized for speed and efficiency
+2. **⚡ Performance-First**: Optimized for speed and efficiency with GSAP animations
 3. **🛡️ Security-Conscious**: Enterprise-grade security measures
 4. **📱 Mobile-Optimized**: Progressive web app capabilities
 5. **🔧 Extensible**: Modular architecture for easy expansion
 6. **📊 Analytics-Ready**: Built-in performance monitoring
 7. **🌍 Globally Scalable**: Cloud-native architecture
-8. **♿ Inclusive Design**: Accessibility-first approach
+8. **♿ Inclusive Design**: Accessibility-first approach with legal compliance
+9. **🎨 Modern UI/UX**: Clean minimalist design with smooth micro-interactions
+10. **📋 Legal Ready**: Comprehensive legal pages for enterprise deployment
 
 ---
 

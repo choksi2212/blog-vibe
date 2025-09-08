@@ -1,9 +1,10 @@
 "use client"
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Calendar, User, Eye, Heart, MessageCircle } from "lucide-react"
+import React, { useRef } from 'react'
+import { Calendar, User, Eye, Heart, MessageCircle } from 'lucide-react'
+import { gsap } from 'gsap'
+import { useGSAP } from '@gsap/react'
+import { GSAPStatusBadge, GSAPFadeIn } from '@/components/ui/gsap-animations'
 import Link from "next/link"
 
 interface BlogCardProps {
@@ -30,6 +31,9 @@ interface BlogCardProps {
 }
 
 export function BlogCard({ blog, showActions, onEdit, onDelete }: BlogCardProps) {
+  const cardRef = useRef<HTMLElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -38,93 +42,162 @@ export function BlogCard({ blog, showActions, onEdit, onDelete }: BlogCardProps)
     })
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "published":
-        return "bg-green-100 text-green-800"
-      case "pending":
-        return "bg-yellow-100 text-yellow-800"
-      case "draft":
-        return "bg-gray-100 text-gray-800"
-      case "rejected":
-        return "bg-red-100 text-red-800"
-      default:
-        return "bg-gray-100 text-gray-800"
+  useGSAP(() => {
+    if (cardRef.current && contentRef.current) {
+      // Initial state
+      gsap.set(cardRef.current, { 
+        opacity: 0, 
+        y: 30,
+        scale: 0.98
+      })
+      
+      gsap.set(contentRef.current.children, { 
+        opacity: 0, 
+        y: 20 
+      })
+
+      // Animate card entrance
+      gsap.to(cardRef.current, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.6,
+        ease: "power2.out"
+      })
+
+      // Animate content with stagger
+      gsap.to(contentRef.current.children, {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        delay: 0.2,
+        stagger: 0.08,
+        ease: "power2.out"
+      })
+    }
+  }, [])
+
+  const handleHover = () => {
+    if (cardRef.current) {
+      gsap.to(cardRef.current, {
+        y: -8,
+        scale: 1.02,
+        duration: 0.4,
+        ease: "power2.out"
+      })
+    }
+  }
+
+  const handleHoverOut = () => {
+    if (cardRef.current) {
+      gsap.to(cardRef.current, {
+        y: 0,
+        scale: 1,
+        duration: 0.4,
+        ease: "power2.out"
+      })
     }
   }
 
   return (
-    <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex-1">
-            <Link
-              href={`/blog/${blog._id}`}
-              className="text-lg font-semibold hover:text-primary transition-colors line-clamp-2"
-            >
-              {blog.title}
-            </Link>
-            <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{blog.excerpt}</p>
+    <article 
+      ref={cardRef}
+      className="group bg-white border border-gray-100 cursor-pointer"
+      onMouseEnter={handleHover}
+      onMouseLeave={handleHoverOut}
+    >
+      <div ref={contentRef} className="p-8">
+        {/* Status Badge */}
+        {blog.status !== "published" && (
+          <div className="mb-4">
+            <GSAPStatusBadge status={blog.status} delay={0.3} />
           </div>
-          <Badge className={getStatusColor(blog.status)}>{blog.status}</Badge>
-        </div>
-      </CardHeader>
+        )}
 
-      <CardContent className="flex-1 flex flex-col justify-between">
-        <div className="space-y-3">
-          <div className="flex flex-wrap gap-1">
-            {blog.tags.slice(0, 3).map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
+        {/* Title */}
+        <h3 className="mb-4">
+          <Link
+            href={`/blog/${blog._id}`}
+            className="font-serif text-xl lg:text-2xl font-semibold text-gray-900 leading-tight group-hover:opacity-70 transition-opacity"
+          >
+            {blog.title}
+          </Link>
+        </h3>
+
+        {/* Excerpt */}
+        <p className="text-gray-600 leading-relaxed mb-6 line-clamp-3">
+          {blog.excerpt}
+        </p>
+
+        {/* Tags */}
+        {blog.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-6">
+            {blog.tags.slice(0, 4).map((tag) => (
+              <span
+                key={tag}
+                className="inline-block px-3 py-1 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
+              >
                 {tag}
-              </Badge>
+              </span>
             ))}
-            {blog.tags.length > 3 && (
-              <Badge variant="secondary" className="text-xs">
-                +{blog.tags.length - 3}
-              </Badge>
+            {blog.tags.length > 4 && (
+              <span className="inline-block px-3 py-1 text-xs font-medium text-gray-500 bg-gray-50">
+                +{blog.tags.length - 4} more
+              </span>
             )}
           </div>
+        )}
 
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
+        {/* Meta Information */}
+        <div className="flex items-center justify-between text-sm text-gray-500">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
               <User className="w-4 h-4" />
-              {blog.author.displayName}
+              <span>{blog.author.displayName}</span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center space-x-1">
               <Calendar className="w-4 h-4" />
-              {formatDate(blog.createdAt)}
+              <span>{formatDate(blog.createdAt)}</span>
             </div>
           </div>
 
+          {/* Engagement Stats */}
           {blog.status === "published" && (
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-1">
                 <Eye className="w-4 h-4" />
-                {blog.views || 0}
+                <span>{blog.views || 0}</span>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center space-x-1">
                 <Heart className="w-4 h-4" />
-                {blog.likes || 0}
+                <span>{blog.likes || 0}</span>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center space-x-1">
                 <MessageCircle className="w-4 h-4" />
-                {blog.comments || 0}
+                <span>{blog.comments || 0}</span>
               </div>
             </div>
           )}
         </div>
 
+        {/* Action Buttons */}
         {showActions && (
-          <div className="flex gap-2 mt-4">
-            <Button variant="outline" size="sm" onClick={onEdit}>
+          <div className="flex space-x-3 mt-6 pt-6 border-t border-gray-100">
+            <button
+              onClick={onEdit}
+              className="px-4 py-2 text-sm font-medium text-gray-900 border border-gray-300 hover:bg-gray-50 transition-colors"
+            >
               Edit
-            </Button>
-            <Button variant="destructive" size="sm" onClick={onDelete}>
+            </button>
+            <button
+              onClick={onDelete}
+              className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition-colors"
+            >
               Delete
-            </Button>
+            </button>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </article>
   )
 }
