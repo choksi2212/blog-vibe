@@ -352,7 +352,7 @@ SMTP Email Service (Gmail/SendGrid)
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/devnovate-blog.git
+git clone https://github.com/choksi2212/blog-vibe.git
 cd devnovate-blog
 
 # 2. Install dependencies
@@ -387,13 +387,13 @@ NEXTAUTH_URL=http://localhost:3000
 
 ```bash
 # Initialize database schema
-pnpm run setup:db
+npm run setup:db
 
 # Or run individual scripts
-pnpm run db:init      # Create collections & schemas
-pnpm run db:indexes   # Create database indexes
-pnpm run db:seed      # Seed with sample data
-pnpm run db:analytics # Setup analytics collection
+npm run db:init      # Create collections & schemas
+npm run db:indexes   # Create database indexes
+npm run db:seed      # Seed with sample data
+npm run db:analytics # Setup analytics collection
 
 # Test database connection
 pnpm run test:db
@@ -403,10 +403,10 @@ pnpm run test:db
 
 ```bash
 # Start frontend development server
-pnpm run dev
+npm run dev
 
 # Start backend development server (optional)
-cd backend && pnpm run dev
+cd backend && npm run dev
 
 # Access the application
 # Frontend: http://localhost:3000
@@ -907,31 +907,6 @@ graph LR
 </tr>
 </table>
 
-### 📊 Impact Metrics
-
-```typescript
-const impactMetrics = {
-  performance: {
-    lighthouse: 95,          // Lighthouse score
-    loadTime: '1.2s',        // Initial page load
-    apiResponse: '150ms',    // Average API response
-    uptime: '99.9%'          // System availability
-  },
-  usability: {
-    wcag: 'AA',              // Accessibility rating
-    mobile: '100%',          // Mobile responsiveness
-    crossBrowser: true,      // Browser compatibility
-    offline: 'Partial'       // PWA capabilities
-  },
-  scalability: {
-    concurrentUsers: '10K+', // Concurrent user capacity
-    storage: 'Unlimited',    // MongoDB Atlas scaling
-    cdn: 'Global',           // Vercel Edge Network
-    regions: 'Multi'         // Global deployment
-  }
-}
-```
-
 ### 🏅 Competitive Advantages
 
 1. **🎯 Developer-Focused**: Built by developers, for developers
@@ -953,7 +928,7 @@ const impactMetrics = {
 
 ```bash
 # 1. Fork & clone the repository
-git clone https://github.com/yourusername/devnovate-blog.git
+git clone https://github.com/choksi2212/blog-vibe.git
 
 # 2. Create a feature branch
 git checkout -b feature/amazing-feature
@@ -984,22 +959,12 @@ git push origin feature/amazing-feature
 
 ### 🐛 Bug Reports
 
-Use our [GitHub Issues](https://github.com/yourusername/devnovate-blog/issues) template for bug reports.
+Use our [GitHub Issues](https://github.com/choksi2212/blog-vibe/issues) template for bug reports.
 
 ---
 
 ## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
 ---
-
-<div align="center">
-  
-### 🚀 Ready to Transform Developer Blogging?
-
-**[Live Demo](https://devnovate-blog.vercel.app)** | **[Documentation](https://docs.devnovate.dev)** | **[API Reference](https://api.devnovate.dev)**
-
 <p>
   <img src="https://img.shields.io/github/stars/yourusername/devnovate-blog?style=social" alt="GitHub stars">
   <img src="https://img.shields.io/github/forks/yourusername/devnovate-blog?style=social" alt="GitHub forks">
