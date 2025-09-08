@@ -192,7 +192,7 @@ export function Footer() {
         <GSAPFadeIn delay={0.6}>
           <div className="border-t border-gray-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-400 text-sm">
-              © 2024 Devnovate. Built with passion for the developer community.
+              © 2025 Devnovate. Built with passion for the developer community.
             </p>
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
               <Link href="/privacy" className="hover:text-white transition-colors">

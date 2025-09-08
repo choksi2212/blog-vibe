@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { AuthProvider } from "@/components/auth/auth-provider"
 import { ClientOnly } from "@/components/ui/client-only"
-import { PerformanceIndicator } from "@/components/ui/performance-monitor"
+import { AuroraWrapper } from "@/components/ui/aurora-wrapper"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
@@ -83,12 +83,12 @@ export default function RootLayout({
         />
       </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+        <AuroraWrapper />
         <ClientOnly fallback={<div className="min-h-screen bg-background">{children}</div>}>
           <Suspense fallback={<div>Loading...</div>}>
             <AuthProvider>{children}</AuthProvider>
           </Suspense>
         </ClientOnly>
-        <PerformanceIndicator />
         <Analytics />
       </body>
     </html>

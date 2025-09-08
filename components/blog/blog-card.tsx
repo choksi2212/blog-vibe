@@ -36,9 +36,9 @@ export function BlogCard({ blog, showActions, onEdit, onDelete }: BlogCardProps)
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
       month: "short",
       day: "numeric",
+      year: "2-digit",
     })
   }
 
@@ -102,11 +102,11 @@ export function BlogCard({ blog, showActions, onEdit, onDelete }: BlogCardProps)
   return (
     <article 
       ref={cardRef}
-      className="group bg-white border border-gray-100 cursor-pointer"
+      className="group bg-white border border-gray-100 cursor-pointer w-full"
       onMouseEnter={handleHover}
       onMouseLeave={handleHoverOut}
     >
-      <div ref={contentRef} className="p-8">
+      <div ref={contentRef} className="p-6 lg:p-8">
         {/* Status Badge */}
         {blog.status !== "published" && (
           <div className="mb-4">
@@ -149,21 +149,21 @@ export function BlogCard({ blog, showActions, onEdit, onDelete }: BlogCardProps)
         )}
 
         {/* Meta Information */}
-        <div className="flex items-center justify-between text-sm text-gray-500">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-1">
-              <User className="w-4 h-4" />
-              <span>{blog.author.displayName}</span>
+        <div className="flex items-center justify-between text-sm text-gray-500 gap-4">
+          <div className="flex items-center space-x-4 min-w-0 flex-1">
+            <div className="flex items-center space-x-1 min-w-0">
+              <User className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">{blog.author.displayName}</span>
             </div>
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-1 flex-shrink-0">
               <Calendar className="w-4 h-4" />
-              <span>{formatDate(blog.createdAt)}</span>
+              <span className="whitespace-nowrap">{formatDate(blog.createdAt)}</span>
             </div>
           </div>
 
           {/* Engagement Stats */}
           {blog.status === "published" && (
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3 flex-shrink-0">
               <div className="flex items-center space-x-1">
                 <Eye className="w-4 h-4" />
                 <span>{blog.views || 0}</span>
