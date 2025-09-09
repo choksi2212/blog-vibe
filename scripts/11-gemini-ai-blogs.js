@@ -23,11 +23,8 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Simple blog topics
 const topics = [
-    "India's Data Protection Act 2023: A Developer's Guide",
-    "AI for Indian Languages: Breaking Barriers in Communication",
     "Smart Villages: IoT and Agriculture 4.0 in Rural India",
     "Cybersecurity for SMEs: Protecting India's Digital Backbone",
-    "Digital Public Infrastructure: Unlocking India Stack for Developers",
     "EdTech in India: Scaling Personalized Learning with AI",
     "Green Tech Startups in India: Innovating for a Sustainable Future"
 ];
