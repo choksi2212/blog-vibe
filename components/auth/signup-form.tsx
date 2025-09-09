@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { auth, googleProvider } from "@/lib/firebase"
 import { useToast } from "@/hooks/use-toast"
@@ -16,80 +16,8 @@ export function SignupForm() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [loading, setLoading] = useState(false)
-  const [recaptchaReady, setRecaptchaReady] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
-
-  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
-  const v2ContainerRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    // @ts-ignore
-    const readyFn = (fn: any) => (window.grecaptcha && window.grecaptcha.ready ? window.grecaptcha.ready(fn) : fn())
-    readyFn(() => {
-      // @ts-ignore
-      if (window.grecaptcha && window.grecaptcha.execute) setRecaptchaReady(true)
-    })
-  }, [])
-
-  async function getRecaptchaToken(action: string): Promise<string | undefined> {
-    if (!siteKey) return undefined
-    // @ts-ignore
-    const grecaptcha = typeof window !== 'undefined' ? window.grecaptcha : undefined
-    if (!grecaptcha || !grecaptcha.ready || !grecaptcha.execute) return undefined
-    return new Promise((resolve) => {
-      grecaptcha.ready(async () => {
-        try {
-          const t = await grecaptcha.execute(siteKey, { action })
-          resolve(t)
-        } catch {
-          resolve(undefined)
-        }
-      })
-    })
-  }
-
-  function loadScriptOnce(src: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (document.querySelector(`script[src=\"${src}\"]`)) return resolve()
-      const s = document.createElement('script')
-      s.src = src
-      s.async = true
-      s.onload = () => resolve()
-      s.onerror = () => reject(new Error('Failed to load script'))
-      document.head.appendChild(s)
-    })
-  }
-
-  async function getRecaptchaTokenWithFallback(v3Action: string): Promise<string | undefined> {
-    // Try v3 first
-    const v3 = await getRecaptchaToken(v3Action)
-    if (v3) return v3
-    // Fallback to v2 invisible
-    try {
-      await loadScriptOnce('https://www.google.com/recaptcha/api.js')
-      // @ts-ignore
-      const grecaptcha = window.grecaptcha
-      if (!grecaptcha || !grecaptcha.render) return undefined
-      if (!v2ContainerRef.current) return undefined
-      return await new Promise<string | undefined>((resolve) => {
-        try {
-          const widgetId = grecaptcha.render(v2ContainerRef.current!, {
-            sitekey: siteKey,
-            size: 'invisible',
-            callback: (token: string) => resolve(token),
-            'error-callback': () => resolve(undefined),
-          })
-          grecaptcha.execute(widgetId)
-        } catch {
-          resolve(undefined)
-        }
-      })
-    } catch {
-      return undefined
-    }
-  }
 
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -106,13 +34,6 @@ export function SignupForm() {
     setLoading(true)
 
     try {
-      // Get reCAPTCHA token if configured
-      const recaptchaToken = await getRecaptchaTokenWithFallback('signup')
-      if (siteKey && !recaptchaToken) {
-        toast({ title: "Security check failed", description: "reCAPTCHA not ready. Please try again.", variant: "destructive" })
-        setLoading(false)
-        return
-      }
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
 
       // Create user profile in database
@@ -125,7 +46,6 @@ export function SignupForm() {
         body: JSON.stringify({
           email: userCredential.user.email,
           uid: userCredential.user.uid,
-          recaptchaToken,
         }),
       })
 
@@ -148,33 +68,46 @@ export function SignupForm() {
   const handleGoogleSignup = async () => {
     setLoading(true)
     try {
-      const recaptchaToken = await getRecaptchaTokenWithFallback('signup_google')
-      if (siteKey && !recaptchaToken) {
-        toast({ title: "Security check failed", description: "reCAPTCHA not ready. Please try again.", variant: "destructive" })
-        setLoading(false)
-        return
+      let userCredential: any
+      try {
+        userCredential = await signInWithPopup(auth, googleProvider)
+      } catch (popupErr: any) {
+        if (popupErr?.code === 'auth/popup-blocked' || popupErr?.code === 'auth/popup-closed-by-user') {
+          const { signInWithRedirect } = await import('firebase/auth')
+          await signInWithRedirect(auth, googleProvider)
+          return
+        }
+        throw popupErr
       }
-      const userCredential = await signInWithPopup(auth, googleProvider)
 
       // Create user profile in database
-      await fetch("/api/auth/register", {
+      const idToken = await userCredential.user.getIdToken()
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${await userCredential.user.getIdToken()}`,
+          Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify({
           email: userCredential.user.email,
           uid: userCredential.user.uid,
-          recaptchaToken,
         }),
       })
+      if (!res.ok) {
+        let msg = "Registration failed"
+        try {
+          const data = await res.json()
+          msg = data?.error || JSON.stringify(data)
+        } catch {}
+        throw new Error(msg)
+      }
 
       toast({
         title: "Success",
         description: "Account created with Google successfully!",
       })
-      router.push("/")
+      router.replace("/")
+      setTimeout(() => { if (typeof window !== 'undefined') window.location.href = "/" }, 100)
     } catch (error: any) {
       toast({
         title: "Error",
@@ -189,10 +122,7 @@ export function SignupForm() {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-6">
       <div className="w-full max-w-md">
-        {null}
         {/* Header */}
-        {/* v2 invisible fallback container (hidden) */}
-        <div ref={v2ContainerRef} style={{ display: 'none' }} />
         <GSAPFadeIn delay={0.1}>
           <div className="text-center mb-8">
             <h2 className="font-serif text-2xl font-semibold text-black mb-3">Create Account</h2>
