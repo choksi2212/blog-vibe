@@ -856,6 +856,6 @@ git push origin feature/amazing-feature
 Use our [GitHub Issues](https://github.com/choksi2212/blog-vibe/issues) template for bug reports.
 
 
-<div align="center" text="bold"> Made with ❤️ by [Manas Ajaykumar Choksi](https://linkedin.com/in/manas-choksi) </div>
+<div align="center" text="bold"> Made with ❤️ by <a href="https://linkedin.com/in/manas-choksi" target="_blank" rel="noopener noreferrer">Manas Ajaykumar Choksi</a> </div>
 
 </div>
