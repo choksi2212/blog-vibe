@@ -7,6 +7,8 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
+    "audit:deps": "npm audit --audit-level=moderate || true",
+    "audit:env": "node -e \"['JWT_SECRET','MONGODB_URI'].forEach(k=>{if(!process.env[k]){console.error('Missing env',k);process.exitCode=1}})\"",
     "setup:db": "node scripts/run-all-setup.js",
     "test:db": "node scripts/test-db-connection.js",
     "db:init": "node scripts/run-mongo-script.js scripts/01-init-database.js",

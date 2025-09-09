@@ -2,10 +2,16 @@ import { type NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/firebase-admin"
 import clientPromise from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
+import { sanitizeHtmlBasic, rateLimit } from "@/lib/security"
+import { z } from "zod"
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+    const rl = rateLimit(request.headers, 'comments:post', 20, 10 * 60 * 1000)
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
+    }
     const authHeader = request.headers.get("authorization")
 
     if (!authHeader?.startsWith("Bearer ")) {
@@ -15,7 +21,13 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const token = authHeader.split("Bearer ")[1]
     const decodedToken = await auth.verifyIdToken(token)
 
-    const { content } = await request.json()
+    const body = await request.json()
+    const schema = z.object({ content: z.string().min(1).max(5000) })
+    const parsed = schema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Invalid comment" }, { status: 400 })
+    }
+    const { content } = parsed.data
 
     if (!content?.trim()) {
       return NextResponse.json({ error: "Comment content is required" }, { status: 400 })
@@ -35,7 +47,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
     const comment = {
       _id: new ObjectId(),
-      content: content.trim(),
+      content: sanitizeHtmlBasic(content.trim()),
       author: {
         displayName: user?.profile?.displayName || "Anonymous",
         email: user?.email || "",

@@ -2,9 +2,15 @@ import { type NextRequest, NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
 import { searchBlogs } from "@/lib/database-utils"
 import { auth } from "@/lib/firebase-admin" // Declare the auth variable
+import { rateLimit, sanitizeHtmlBasic } from "@/lib/security"
+import { z } from "zod"
 
 export async function GET(request: NextRequest) {
   try {
+    const rl = rateLimit(request.headers, 'blogs:get', 120, 5 * 60 * 1000)
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
+    }
     const { searchParams } = new URL(request.url)
     const status = searchParams.get("status")
     const limit = Number.parseInt(searchParams.get("limit") || "10")
@@ -143,6 +149,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const rl = rateLimit(request.headers, 'blogs:post', 20, 10 * 60 * 1000)
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
+    }
     const authHeader = request.headers.get("authorization")
 
     if (!authHeader?.startsWith("Bearer ")) {
@@ -152,7 +162,19 @@ export async function POST(request: NextRequest) {
     const token = authHeader.split("Bearer ")[1]
     const decodedToken = await auth.verifyIdToken(token) // Use the declared auth variable
 
-    const { title, content, excerpt, tags, status } = await request.json()
+    const body = await request.json()
+    const schema = z.object({
+      title: z.string().min(1).max(300),
+      content: z.string().min(1),
+      excerpt: z.string().optional(),
+      tags: z.array(z.string().max(32)).max(20).optional(),
+      status: z.enum(["pending", "draft", "published"]).optional(),
+    })
+    const parsed = schema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Invalid blog data" }, { status: 400 })
+    }
+    const { title, content, excerpt, tags, status } = parsed.data
 
     if (!title || !content) {
       return NextResponse.json({ error: "Title and content are required" }, { status: 400 })
@@ -163,8 +185,8 @@ export async function POST(request: NextRequest) {
 
     const newBlog = {
       title,
-      content,
-      excerpt: excerpt || content.substring(0, 200) + "...",
+      content: sanitizeHtmlBasic(content),
+      excerpt: sanitizeHtmlBasic(excerpt || content.substring(0, 200) + "..."),
       tags: tags || [],
       authorId: decodedToken.uid,
       status: status || "pending",
