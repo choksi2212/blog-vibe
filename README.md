@@ -935,15 +935,6 @@ git push origin feature/amazing-feature
 
 Use our [GitHub Issues](https://github.com/choksi2212/blog-vibe/issues) template for bug reports.
 
----
-
-## 📄 License
----
-<p>
-  <img src="https://img.shields.io/github/stars/yourusername/devnovate-blog?style=social" alt="GitHub stars">
-  <img src="https://img.shields.io/github/forks/yourusername/devnovate-blog?style=social" alt="GitHub forks">
-  <img src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fyourusername%2Fdevnovate-blog" alt="Twitter">
-</p>
 
 **Made with ❤️ for the Developer Community**
 
