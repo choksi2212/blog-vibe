@@ -155,11 +155,6 @@ graph TB
     L --> N
     M --> P
     O --> N
-    
-    style A fill:#61dafb
-    style N fill:#4db33d
-    style D fill:#ffca28
-    style H fill:#68cd4b
 ```
 
 ### 🔄 Data Flow Architecture
@@ -436,10 +431,6 @@ flowchart TD
     I --> J{User Role?}
     J -->|Admin| K[Admin Dashboard]
     J -->|User| L[User Dashboard]
-    
-    style A fill:#e1f5fe
-    style K fill:#ffebee
-    style L fill:#f3e5f5
 ```
 
 ### 📝 Content Publishing Workflow
@@ -467,11 +458,6 @@ flowchart TD
     L --> O[Blog Live on Platform]
     M --> P[Author Can Re-edit]
     N --> P
-    
-    style A fill:#e8f5e8
-    style I fill:#c8e6c9
-    style J fill:#ffcdd2
-    style O fill:#81c784
 ```
 
 ### 💬 Engagement System
@@ -490,10 +476,6 @@ flowchart LR
     
     G --> I[Update Blog Stats]
     H --> J[Notify Author]
-    
-    style A fill:#fff3e0
-    style E fill:#ffcc02
-    style F fill:#42a5f5
 ```
 
 ---
@@ -810,10 +792,6 @@ graph TD
     A1["Cypress/Playwright<br/>User Journeys"] --> A
     B1["API Tests<br/>Database Tests"] --> B
     C1["Component Tests<br/>Utility Tests"] --> C
-    
-    style C fill:#c8e6c9
-    style B fill:#fff9c4
-    style A fill:#ffcdd2
 ```
 
 ### 📋 Test Coverage
@@ -844,10 +822,6 @@ graph LR
     F --> H[CDN Distribution]
     G --> I[Database Connection]
     I --> J[MongoDB Atlas]
-    
-    style F fill:#000000
-    style G fill:#8B5CF6
-    style J fill:#4db33d
 ```
 
 ### 📋 Deployment Checklist
