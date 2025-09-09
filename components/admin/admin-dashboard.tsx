@@ -96,13 +96,14 @@ export function AdminDashboard() {
     }
   }
 
-  const handleBlogAction = async (blogId: string, action: "approve" | "reject" | "hide" | "delete") => {
+  const handleBlogAction = async (blogId: string, action: "approve" | "reject" | "hide" | "delete" | "unhide") => {
     if (!user) return
 
     const confirmMessages = {
       approve: "Are you sure you want to approve this blog?",
       reject: "Are you sure you want to reject this blog?",
       hide: "Are you sure you want to hide this blog?",
+      unhide: "Are you sure you want to unhide this blog?",
       delete: "Are you sure you want to delete this blog? This action cannot be undone.",
     }
 
@@ -114,17 +115,31 @@ export function AdminDashboard() {
     }
 
     try {
-      const response = await fetch(`/api/admin/blogs/${blogId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${await user.getIdToken()}`,
-        },
-        body: JSON.stringify({
-          action,
-          reason: rejectionReason,
-        }),
-      })
+      let response;
+      
+      if (action === "delete") {
+        // Use DELETE method for actual deletion
+        response = await fetch(`/api/admin/blogs/${blogId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${await user.getIdToken()}`,
+          },
+        })
+      } else {
+        // Use PATCH method for status updates
+        const actionToSend = action === "unhide" ? "approve" : action;
+        response = await fetch(`/api/admin/blogs/${blogId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${await user.getIdToken()}`,
+          },
+          body: JSON.stringify({
+            action: actionToSend,
+            reason: rejectionReason,
+          }),
+        })
+      }
 
       if (!response.ok) throw new Error(`Failed to ${action} blog`)
 
@@ -134,7 +149,11 @@ export function AdminDashboard() {
         setBlogs(
           blogs.map((blog) =>
             blog._id === blogId
-              ? { ...blog, status: action === "approve" ? "published" : action === "reject" ? "rejected" : "hidden" }
+              ? { 
+                  ...blog, 
+                  status: action === "approve" || action === "unhide" ? "published" : 
+                          action === "reject" ? "rejected" : "hidden" 
+                }
               : blog,
           ),
         )
@@ -328,8 +347,9 @@ export function AdminDashboard() {
               showActions={
                 activeTab === 'pending' ? ['approve', 'reject', 'delete'] :
                 activeTab === 'published' ? ['hide', 'delete'] :
-                activeTab === 'rejected' || activeTab === 'hidden' ? ['approve', 'delete'] :
-                ['approve', 'reject', 'hide', 'delete']
+                activeTab === 'rejected' ? ['approve', 'delete'] :
+                activeTab === 'hidden' ? ['unhide', 'delete'] :
+                ['approve', 'reject', 'hide', 'delete', 'unhide']
               }
             />
           </div>
@@ -341,8 +361,8 @@ export function AdminDashboard() {
 
 interface AdminBlogGridProps {
   blogs: Blog[]
-  onAction: (blogId: string, action: "approve" | "reject" | "hide" | "delete") => void
-  showActions: ("approve" | "reject" | "hide" | "delete")[]
+  onAction: (blogId: string, action: "approve" | "reject" | "hide" | "delete" | "unhide") => void
+  showActions: ("approve" | "reject" | "hide" | "delete" | "unhide")[]
 }
 
 function AdminBlogGrid({ blogs, onAction, showActions }: AdminBlogGridProps) {
@@ -369,8 +389,8 @@ function AdminBlogGrid({ blogs, onAction, showActions }: AdminBlogGridProps) {
 
 interface AdminBlogCardProps {
   blog: Blog
-  onAction: (blogId: string, action: "approve" | "reject" | "hide" | "delete") => void
-  showActions: ("approve" | "reject" | "hide" | "delete")[]
+  onAction: (blogId: string, action: "approve" | "reject" | "hide" | "delete" | "unhide") => void
+  showActions: ("approve" | "reject" | "hide" | "delete" | "unhide")[]
 }
 
 function AdminBlogCard({ blog, onAction, showActions }: AdminBlogCardProps) {
@@ -477,6 +497,16 @@ function AdminBlogCard({ blog, onAction, showActions }: AdminBlogCardProps) {
             >
               <EyeOff className="w-3 h-3" />
               Hide
+            </button>
+          )}
+
+          {showActions.includes("unhide") && (
+            <button
+              onClick={() => onAction(blog._id, "unhide")}
+              className="bg-black text-white px-3 py-2 text-xs font-medium hover:bg-gray-800 transition-colors flex items-center gap-1"
+            >
+              <Eye className="w-3 h-3" />
+              Unhide
             </button>
           )}
 
