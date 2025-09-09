@@ -86,23 +86,12 @@ Write a comprehensive technical blog post about: ${topic}`;
     const tagsText = tagsMatch ? tagsMatch[1].trim() : '';
     const tags = tagsText.split(',').map(tag => tag.trim().replace(/[\[\]]/g, '')).filter(tag => tag);
 
-    // Create blog document
+    // Create blog document (without author info - handled separately)
     const blog = {
       title,
       excerpt,
       content,
-      tags: tags.length > 0 ? tags : ['programming', 'development'],
-      author: {
-        displayName: author.name,
-        email: author.email
-      },
-      status: "published",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      publishedAt: new Date(),
-      views: Math.floor(Math.random() * 1000) + 100,
-      likes: Math.floor(Math.random() * 50) + 10,
-      readTime: Math.ceil(content.length / 1000) // Rough estimate
+      tags: tags.length > 0 ? tags : ['programming', 'development']
     };
 
     return blog;
@@ -121,6 +110,30 @@ async function generateMultipleBlogs(count = 5) {
   await client.connect();
   const db = client.db('devnovate_blog');
   const blogsCollection = db.collection('blogs');
+  const usersCollection = db.collection('users');
+
+  // Create users for each author if they don't exist
+  console.log('👥 Setting up authors...');
+  for (const author of authors) {
+    const existingUser = await usersCollection.findOne({ email: author.email });
+    if (!existingUser) {
+      const userDoc = {
+        uid: `ai-author-${author.name.toLowerCase().replace(/\s+/g, '-')}`,
+        email: author.email,
+        profile: {
+          displayName: author.name,
+          photoURL: null
+        },
+        role: 'author',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      await usersCollection.insertOne(userDoc);
+      console.log(`✅ Created user: ${author.name}`);
+    } else {
+      console.log(`ℹ️  User already exists: ${author.name}`);
+    }
+  }
 
   let successful = 0;
   let failed = 0;
@@ -136,7 +149,31 @@ async function generateMultipleBlogs(count = 5) {
 
     if (blog) {
       try {
-        await blogsCollection.insertOne(blog);
+        // Get the author's UID from the users collection
+        const authorUser = await usersCollection.findOne({ email: author.email });
+        if (!authorUser) {
+          console.error(`❌ Author not found: ${author.name}`);
+          failed++;
+          continue;
+        }
+
+        // Create blog document with authorId instead of author object
+        const blogDoc = {
+          title: blog.title,
+          excerpt: blog.excerpt,
+          content: blog.content,
+          tags: blog.tags,
+          authorId: authorUser.uid,
+          status: "published",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          publishedAt: new Date(),
+          views: Math.floor(Math.random() * 1000) + 100,
+          likes: Math.floor(Math.random() * 50) + 10,
+          readTime: Math.ceil(blog.content.length / 1000)
+        };
+
+        await blogsCollection.insertOne(blogDoc);
         console.log(`✅ Successfully created: "${blog.title}"`);
         successful++;
       } catch (dbError) {

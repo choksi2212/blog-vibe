@@ -162,7 +162,7 @@ export const emailTemplates = {
             </div>
             
             <div class="footer">
-              <p>© 2024 Devnovate. Built with passion for the developer community.</p>
+              <p>© 2025 Devnovate. Built with passion for the developer community.</p>
             </div>
           </div>
         </body>
