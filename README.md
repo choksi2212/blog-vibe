@@ -10,6 +10,47 @@
   <img src="https://img.shields.io/badge/GSAP-Animations-green?style=for-the-badge&logo=greensock" alt="GSAP">
 </div>
 
+---
+
+## 🛡️ reCAPTCHA Setup (v3 with v2 Invisible Fallback)
+
+### 1) Create keys
+- Visit: `https://www.google.com/recaptcha/admin/create`
+- Create a reCAPTCHA v3 site
+  - Label: any
+  - Domains: add `localhost`, `127.0.0.1`, and your production domains (e.g., `example.com`, `www.example.com`). Do NOT include protocol or port.
+- (Optional) Create a reCAPTCHA v2 Invisible site for fallback
+
+### 2) Environment variables
+Add to `.env.local` (dev) and to your deployment’s env settings (prod):
+
+```bash
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_v3_site_key
+RECAPTCHA_SECRET_KEY=your_v3_secret_key
+# Optional v2 invisible fallback (server-side verification)
+RECAPTCHA_V2_SECRET_KEY=your_v2_invisible_secret_key
+```
+
+Restart the dev server after editing `.env.local`.
+
+### 3) How it works in this project
+- Client (Signup): Loads reCAPTCHA v3 on `/signup`, obtains a token via `grecaptcha.ready().execute()`.
+- Fallback: If v3 token isn’t available, the form loads v2 invisible, renders a hidden widget, and executes it.
+- Server: `POST /api/auth/register` verifies v3 first, and if provided, verifies v2 when configured. In dev, any successful verification is accepted.
+
+### 4) Troubleshooting
+- Domain errors: reCAPTCHA console domains must be hostnames only (e.g., `localhost`, not `http://localhost:3000`).
+- Script blocked: disable ad/script blockers and confirm the script loads with 200 in Network tab.
+- Env mismatch: ensure `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` and `RECAPTCHA_SECRET_KEY` belong to the same reCAPTCHA v3 property.
+- Server secret: confirm the secret(s) are set in your server environment, not only locally.
+- Diagnostics: In non‑production, the register API may include minimal verification details on failure to help debugging.
+
+### 5) CSP note
+If you enforce CSP, allow:
+- `script-src`: `www.google.com www.gstatic.com`
+- `connect-src/img-src/frame-src` as required by reCAPTCHA
+
+
 <div align="center">
   <h3>🏆 A Modern, Full-Stack Blogging Platform for Developers</h3>
   <p><em>Empowering developers to share knowledge, build community, and accelerate innovation with stunning animations and seamless user experience</em></p>
