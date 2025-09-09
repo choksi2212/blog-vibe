@@ -80,7 +80,6 @@
 - ✅ Image optimization
 - ✅ Caching implementation
 - ✅ GSAP-optimized animations
-- ✅ Performance monitoring components
 
 </td>
 </tr>
@@ -587,81 +586,51 @@ All emails feature:
 ### 🔒 Data Protection
 
 ```typescript
-// Security Measures Implemented
+// Security Measures Implemented (Latest)
 const securityFeatures = {
   authentication: {
     provider: 'Firebase Auth',
     tokenValidation: 'Server-side verification',
-    sessionManagement: 'HTTP-only cookies'
+    signupProtection: 'reCAPTCHA v3 with v2 invisible fallback',
+    sessionManagement: 'Short-lived JWT (issuer/audience), HTTP-only where applicable'
   },
   authorization: {
     rbac: 'Role-based access control',
-    routeProtection: 'Middleware validation',
-    dataFiltering: 'User-scoped queries'
+    routeProtection: 'Centralized middleware + per-route checks',
+    dataFiltering: 'User-scoped queries with ownership checks'
   },
-  dataValidation: {
-    inputSanitization: 'Zod schema validation',
-    sqlInjection: 'MongoDB parameterized queries',
-    xssProtection: 'Content sanitization'
+  inputAndOutput: {
+    validation: 'Zod validation on all critical write endpoints',
+    sanitization: 'Server-side HTML sanitization for blogs/comments',
+    objectIdGuard: 'ObjectId format validation for dynamic routes'
   },
-  infrastructure: {
-    https: 'SSL/TLS encryption',
-    cors: 'Cross-origin protection',
-    rateLimit: 'API rate limiting',
-    monitoring: 'Error tracking & alerts'
+  httpLayer: {
+    headers: 'HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy',
+    csp: 'Content-Security-Policy (report-only) with request nonces',
+    coopCoepCorp: 'Cross-Origin-Opener/Resource-Policy defaults',
+    cors: 'Centralized CORS helper (tightenable per route)'
+  },
+  abusePrevention: {
+    rateLimit: 'IP-based rate limiting on auth, newsletter, likes, comments, blogs',
+    auditLog: 'Best-effort audit logs for sensitive actions'
+  },
+  dependenciesAndSecrets: {
+    audits: 'npm audit script and environment checks',
+    secrets: 'All secrets via environment variables; no plaintext commits'
   }
 }
 ```
 
 ### 🛡️ Content Security
 
-- **Input Validation**: Zod schemas for all API inputs
-- **Content Sanitization**: HTML sanitization for user content
-- **File Upload Security**: Type validation and size limits
-- **Rate Limiting**: Prevents spam and abuse
-- **Audit Logging**: Track all administrative actions
-
----
-
-## 📈 Performance Optimizations
-
-### ⚡ Frontend Optimizations
-
-```typescript
-// Performance Strategies
-const optimizations = {
-  rendering: {
-    ssr: 'Server-side rendering for SEO',
-    streaming: 'React 18 concurrent features',
-    caching: 'Static generation where possible'
-  },
-  bundling: {
-    codesplitting: 'Route-based splitting',
-    treeshaking: 'Unused code elimination',
-    compression: 'Gzip & Brotli compression'
-  },
-  assets: {
-    images: 'Next.js Image optimization',
-    fonts: 'Self-hosted font loading',
-    lazy: 'Intersection Observer lazy loading'
-  },
-  api: {
-    caching: 'Redis/Memory caching',
-    pagination: 'Cursor-based pagination',
-    prefetching: 'Link prefetching'
-  }
-}
-```
-
-### 📊 Performance Metrics
-
-| Metric | Target | Current |
-|--------|--------|---------|
-| First Contentful Paint | < 1.5s | 1.2s |
-| Largest Contentful Paint | < 2.5s | 2.1s |
-| Cumulative Layout Shift | < 0.1 | 0.05 |
-| Time to Interactive | < 3.5s | 2.8s |
-| API Response Time | < 200ms | 150ms |
+- **Strict Headers**: HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy
+- **CSP (report-only)**: Nonce-based policy applied globally; easy to enforce later
+- **Input Validation**: Zod schemas for all write endpoints (auth/blogs/comments/newsletter)
+- **Content Sanitization**: Server-side sanitizer for blog bodies, excerpts, and comments
+- **MongoDB Safety**: No `$where`/JS; ObjectId and operator safety checks
+- **Rate Limiting**: Auth, comments, likes, newsletter, and blog mutations
+- **reCAPTCHA on Signup**: v3 primary with automatic v2 invisible fallback
+- **Audit Logging**: Records blog update/delete and user registration (best effort)
 
 ---
 
@@ -796,15 +765,6 @@ graph TD
     C1["Component Tests<br/>Utility Tests"] --> C
 ```
 
-### 📋 Test Coverage
-
-| Category | Coverage | Tools |
-|----------|----------|-------|
-| Unit Tests | 85%+ | Jest, React Testing Library |
-| Integration | 70%+ | Supertest, MongoDB Memory |
-| E2E Tests | Key Flows | Playwright |
-| Performance | Core Metrics | Lighthouse CI |
-
 ---
 
 ## 🚢 Deployment
@@ -890,14 +850,6 @@ git push origin feature/amazing-feature
 
 # 7. Create a Pull Request
 ```
-
-### 📋 Contribution Guidelines
-
-- **Code Quality**: Follow TypeScript best practices
-- **Testing**: Add tests for new features
-- **Documentation**: Update relevant documentation
-- **Commits**: Use conventional commit messages
-- **Reviews**: All PRs require review
 
 ### 🐛 Bug Reports
 
