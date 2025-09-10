@@ -16,7 +16,8 @@ import {
   Loader2,
   TrendingUp,
   Heart,
-  MessageCircle
+  MessageCircle,
+  Home
 } from 'lucide-react'
 import { 
   GSAPMetricCard, 
@@ -142,7 +143,14 @@ export function UserDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-8">
+      <Link
+        href="/"
+        className="absolute top-6 left-6 z-20 font-serif text-2xl font-semibold text-gradient tracking-tight transition-smooth hover:scale-105 animate-fade-in"
+      >
+        Devnovate
+      </Link>
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <GSAPFadeIn delay={0.1}>

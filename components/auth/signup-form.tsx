@@ -7,6 +7,8 @@ import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth"
 import { auth, googleProvider } from "@/lib/firebase"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { Home } from "lucide-react"
 import { GSAPFadeIn, GSAPLoadingSpinner } from "@/components/ui/gsap-animations"
 import { GSAPButton } from "@/components/ui/gsap-micro-interactions"
 
@@ -125,6 +127,13 @@ export function SignupForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-8">
+      <Link
+        href="/"
+        className="absolute top-6 left-6 z-20 font-serif text-2xl font-semibold text-gradient tracking-tight transition-smooth hover:scale-105 animate-fade-in"
+      >
+        Devnovate
+      </Link>
+      
       <div className="w-full max-w-sm sm:max-w-md">
         {/* Header */}
         <GSAPFadeIn delay={0.1}>
