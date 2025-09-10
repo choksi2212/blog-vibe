@@ -61,8 +61,3 @@ export function isValidObjectId(id: string): boolean {
 }
 
 // Note: reCAPTCHA verification removed on request
-<<<<<<< HEAD
-=======
-
-
->>>>>>> e6cfdb6dae55ef1e9d79d988f8e00b5f605f043f

@@ -14,3 +14,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const googleProvider = new GoogleAuthProvider()
+
+// Improve reliability and UX: force account chooser and ensure profile/email scopes
+googleProvider.setCustomParameters({ prompt: "select_account" })
+googleProvider.addScope("email")
+googleProvider.addScope("profile")
