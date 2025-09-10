@@ -2,10 +2,15 @@ import { type NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/firebase-admin"
 import clientPromise from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
+import { rateLimit } from "@/lib/security"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+    const rl = rateLimit(request.headers, 'likes:get', 60, 5 * 60 * 1000)
+    if (!rl.allowed) {
+      return NextResponse.json({ liked: false }, { status: 429 })
+    }
     const authHeader = request.headers.get("authorization")
 
     if (!authHeader?.startsWith("Bearer ")) {
@@ -32,6 +37,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+    const rl = rateLimit(request.headers, 'likes:post', 30, 5 * 60 * 1000)
+    if (!rl.allowed) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 })
+    }
     const authHeader = request.headers.get("authorization")
 
     if (!authHeader?.startsWith("Bearer ")) {

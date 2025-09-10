@@ -6,21 +6,21 @@ This directory contains powerful scripts to generate realistic, high-quality blo
 
 ### 1. Setup Environment
 Add your OpenRouter API key to `.env.local`:
-```bash
+\`\`\`bash
 # Get your API key from: https://openrouter.ai/keys
 OPENROUTER_API_KEY=your_openrouter_api_key_here
-```
+\`\`\`
 
 ### 2. Complete Setup with AI Blogs
-```bash
+\`\`\`bash
 node scripts/setup-with-ai-blogs.js
-```
+\`\`\`
 This runs database setup AND generates 8 high-quality AI blogs automatically.
 
 ## 📝 Individual Scripts
 
 ### Generate Custom Blogs
-```bash
+\`\`\`bash
 # Use presets for common topics
 node scripts/08-generate-custom-blogs.js react
 node scripts/08-generate-custom-blogs.js nodejs
@@ -30,22 +30,22 @@ node scripts/08-generate-custom-blogs.js ai
 # Or create custom topics
 node scripts/08-generate-custom-blogs.js custom "GraphQL Best Practices" "API Development"
 node scripts/08-generate-custom-blogs.js custom "Vue.js 3 Composition API" "Frontend Development"
-```
+\`\`\`
 
 ### Batch Generation
-```bash
+\`\`\`bash
 # Generate 5 blogs (default)
 node scripts/09-batch-generate-blogs.js
 
 # Generate specific number (1-20)
 node scripts/09-batch-generate-blogs.js 10
-```
+\`\`\`
 
 ### Comprehensive Generation
-```bash
+\`\`\`bash
 # Generate wide variety of topics (20+ blogs)
 node scripts/07-generate-ai-blogs.js
-```
+\`\`\`
 
 ## 🎯 Available Presets
 
@@ -82,23 +82,23 @@ The AI generates blogs that include:
 
 ### Modify Blog Topics
 Edit the `batchTopics` array in `09-batch-generate-blogs.js`:
-```javascript
+\`\`\`javascript
 {
   topic: "Your Custom Topic Here",
   category: "Your Category",
   length: "medium", // short, medium, long
   includeCode: true
 }
-```
+\`\`\`
 
 ### Add Author Profiles
 Update the `authorProfiles` array:
-```javascript
+\`\`\`javascript
 {
   displayName: "Your Name",
   email: "your.email@domain.com"
 }
-```
+\`\`\`
 
 ### Adjust Content Length
 - `short`: 800-1200 words
@@ -115,33 +115,33 @@ Update the `authorProfiles` array:
 ## 🛠️ Troubleshooting
 
 ### API Key Issues
-```bash
+\`\`\`bash
 ❌ GEMINI_API_KEY not found in environment variables
-```
+\`\`\`
 **Solution**: Add your API key to `.env.local`
 
 ### Model Not Found Error
-```bash
+\`\`\`bash
 ❌ Error: models/gemini-pro is not found for API version v1beta
-```
+\`\`\`
 **Solution**: The scripts now use `gemini-1.5-flash` (updated automatically)
 
 ### Rate Limiting
-```bash
+\`\`\`bash
 ❌ Error generating blog: 429 Too Many Requests
-```
+\`\`\`
 **Solution**: Increase delay between requests or reduce batch size
 
 ### JSON Parsing Errors
-```bash
+\`\`\`bash
 ❌ Failed to parse AI response as JSON
-```
+\`\`\`
 **Solution**: The AI sometimes returns malformed JSON. Script will retry automatically.
 
 ### Database Connection
-```bash
+\`\`\`bash
 ❌ Database error: MongoServerError
-```
+\`\`\`
 **Solution**: Check your `MONGODB_URI` in `.env.local`
 
 ## 📈 Performance Tips
@@ -154,7 +154,7 @@ Update the `authorProfiles` array:
 
 ## 🎨 Example Generated Blog Structure
 
-```markdown
+\`\`\`markdown
 # Advanced React Patterns for Large Applications
 
 React has evolved significantly, and with it, the patterns we use to build scalable applications...
@@ -163,12 +163,12 @@ React has evolved significantly, and with it, the patterns we use to build scala
 When building large-scale React applications, certain patterns emerge that help maintain code quality...
 
 ## 1. Compound Components Pattern
-```jsx
+\`\`\`jsx
 // Example code with detailed explanations
 const Accordion = ({ children }) => {
   // Implementation details...
 }
-```
+\`\`\`
 
 ## 2. Render Props Pattern
 ... detailed explanation with examples ...
@@ -180,7 +180,7 @@ const Accordion = ({ children }) => {
 
 ## Conclusion
 These patterns help create maintainable, scalable React applications...
-```
+\`\`\`
 
 ## 🌟 Getting the Best Results
 

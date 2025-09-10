@@ -50,27 +50,32 @@ export function TrendingBlogs() {
     return (
       <section className="py-16 px-4">
         <div className="container mx-auto">
-          <div className="flex justify-center">Loading trending blogs...</div>
+          <div className="flex justify-center items-center space-x-2">
+            <div className="animate-pulse-subtle">Loading trending blogs...</div>
+          </div>
         </div>
       </section>
     )
   }
 
   return (
-    <section className="py-20 px-4 bg-white">
+    <section className="py-20 px-4 relative">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <TrendingUp className="w-6 h-6 text-black" />
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-black">
+            <TrendingUp className="w-6 h-6 text-foreground animate-float" />
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-foreground text-gradient leading-tight">
               Trending This Week
             </h2>
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center animate-scale-in" style={{ animationDelay: "0.3s" }}>
             <Link href="/blogs">
-              <Button variant="outline" className="flex items-center gap-2 bg-transparent border-black text-black hover:bg-black hover:text-white">
+              <Button
+                variant="outline"
+                className="flex items-center gap-2 bg-transparent border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-smooth hover-lift rounded-lg group"
+              >
                 View All
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 transition-smooth group-hover:translate-x-1" />
               </Button>
             </Link>
           </div>
@@ -78,14 +83,18 @@ export function TrendingBlogs() {
 
         {blogs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.slice(0, 6).map((blog) => (
-              <BlogCard key={blog._id} blog={blog} />
+            {blogs.slice(0, 6).map((blog, index) => (
+              <div key={blog._id} className="animate-slide-up hover-lift" style={{ animationDelay: `${index * 0.1}s` }}>
+                <BlogCard blog={blog} />
+              </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <TrendingUp className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">No trending blogs yet</h3>
+          <div className="text-center py-12 animate-fade-in">
+            <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-subtle">
+              <TrendingUp className="w-8 h-8 text-accent-foreground" />
+            </div>
+            <h3 className="text-lg font-medium mb-2 text-foreground">No trending blogs yet</h3>
             <p className="text-muted-foreground">Check back soon for popular content!</p>
           </div>
         )}

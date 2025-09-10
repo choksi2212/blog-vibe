@@ -4,76 +4,76 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color tokens to match Devnovate design brief with emerald theme */
+  /* Updated to pure black and white theme with subtle grays */
   --background: oklch(1 0 0);
-  --foreground: oklch(0.35 0 0);
-  --card: oklch(0.97 0 0);
-  --card-foreground: oklch(0.35 0 0);
+  --foreground: oklch(0.1 0 0);
+  --card: oklch(0.99 0 0);
+  --card-foreground: oklch(0.1 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.35 0 0);
-  --primary: oklch(0.45 0.15 160);
+  --popover-foreground: oklch(0.1 0 0);
+  --primary: oklch(0.1 0 0);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.55 0.12 160);
-  --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.35 0 0);
-  --accent: oklch(0.55 0.12 160);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.55 0.22 25);
+  --secondary: oklch(0.95 0 0);
+  --secondary-foreground: oklch(0.1 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.4 0 0);
+  --accent: oklch(0.95 0 0);
+  --accent-foreground: oklch(0.1 0 0);
+  --destructive: oklch(0.5 0.2 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.92 0 0);
-  --input: oklch(0.97 0 0);
-  --ring: oklch(0.45 0.15 160 / 0.5);
-  --chart-1: oklch(0.45 0.15 160);
-  --chart-2: oklch(0.55 0.12 160);
-  --chart-3: oklch(0.35 0 0);
-  --chart-4: oklch(0.55 0.22 25);
-  --chart-5: oklch(0.65 0.18 45);
-  --radius: 0.5rem;
-  --sidebar: oklch(0.97 0 0);
-  --sidebar-foreground: oklch(0.35 0 0);
-  --sidebar-primary: oklch(0.45 0.15 160);
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.98 0 0);
+  --ring: oklch(0.1 0 0 / 0.2);
+  --chart-1: oklch(0.1 0 0);
+  --chart-2: oklch(0.3 0 0);
+  --chart-3: oklch(0.5 0 0);
+  --chart-4: oklch(0.7 0 0);
+  --chart-5: oklch(0.9 0 0);
+  --radius: 0.75rem;
+  --sidebar: oklch(0.98 0 0);
+  --sidebar-foreground: oklch(0.1 0 0);
+  --sidebar-primary: oklch(0.1 0 0);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.55 0.12 160);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(0.92 0 0);
-  --sidebar-ring: oklch(0.45 0.15 160 / 0.5);
+  --sidebar-accent: oklch(0.95 0 0);
+  --sidebar-accent-foreground: oklch(0.1 0 0);
+  --sidebar-border: oklch(0.9 0 0);
+  --sidebar-ring: oklch(0.1 0 0 / 0.2);
 }
 
 .dark {
-  /* Updated dark mode tokens to maintain emerald theme consistency */
-  --background: oklch(0.08 0 0);
+  /* Updated dark mode to pure black and white with subtle grays */
+  --background: oklch(0.05 0 0);
   --foreground: oklch(0.95 0 0);
-  --card: oklch(0.12 0 0);
+  --card: oklch(0.08 0 0);
   --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.08 0 0);
+  --popover: oklch(0.05 0 0);
   --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.55 0.12 160);
-  --primary-foreground: oklch(0.08 0 0);
-  --secondary: oklch(0.18 0 0);
+  --primary: oklch(0.95 0 0);
+  --primary-foreground: oklch(0.05 0 0);
+  --secondary: oklch(0.15 0 0);
   --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.18 0 0);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.18 0 0);
+  --muted: oklch(0.12 0 0);
+  --muted-foreground: oklch(0.6 0 0);
+  --accent: oklch(0.15 0 0);
   --accent-foreground: oklch(0.95 0 0);
-  --destructive: oklch(0.45 0.18 25);
+  --destructive: oklch(0.6 0.2 25);
   --destructive-foreground: oklch(0.95 0 0);
-  --border: oklch(0.18 0 0);
-  --input: oklch(0.18 0 0);
-  --ring: oklch(0.55 0.12 160 / 0.5);
-  --chart-1: oklch(0.55 0.12 160);
-  --chart-2: oklch(0.65 0.15 160);
-  --chart-3: oklch(0.75 0.12 160);
-  --chart-4: oklch(0.55 0.22 25);
-  --chart-5: oklch(0.65 0.18 45);
-  --sidebar: oklch(0.12 0 0);
+  --border: oklch(0.2 0 0);
+  --input: oklch(0.12 0 0);
+  --ring: oklch(0.95 0 0 / 0.2);
+  --chart-1: oklch(0.95 0 0);
+  --chart-2: oklch(0.8 0 0);
+  --chart-3: oklch(0.6 0 0);
+  --chart-4: oklch(0.4 0 0);
+  --chart-5: oklch(0.2 0 0);
+  --sidebar: oklch(0.08 0 0);
   --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.55 0.12 160);
-  --sidebar-primary-foreground: oklch(0.08 0 0);
-  --sidebar-accent: oklch(0.18 0 0);
+  --sidebar-primary: oklch(0.95 0 0);
+  --sidebar-primary-foreground: oklch(0.05 0 0);
+  --sidebar-accent: oklch(0.15 0 0);
   --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(0.18 0 0);
-  --sidebar-ring: oklch(0.55 0.12 160 / 0.5);
+  --sidebar-border: oklch(0.2 0 0);
+  --sidebar-ring: oklch(0.95 0 0 / 0.2);
 }
 
 @theme inline {
@@ -123,23 +123,247 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Added smooth scrolling and improved font rendering */
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
-  
+
+  /* Added modern scroll bar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: oklch(0.7 0 0);
+    border-radius: 3px;
+    transition: background 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.5 0 0);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: oklch(0.3 0 0);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.5 0 0);
+  }
+
+  /* Added modern selection styling */
+  ::selection {
+    background: oklch(0.1 0 0 / 0.1);
+    color: oklch(0.1 0 0);
+  }
+
+  .dark ::selection {
+    background: oklch(0.95 0 0 / 0.1);
+    color: oklch(0.95 0 0);
+  }
+
   /* Prevent Dark Reader from interfering with Lucide icons */
   .lucide {
     /* Force Dark Reader to not modify these elements */
     -webkit-appearance: none !important;
     appearance: none !important;
   }
-  
+
   /* Prevent Dark Reader from adding inline styles to SVG elements */
   svg.lucide {
     stroke: currentColor !important;
   }
-  
+
   /* Ensure consistent rendering between server and client */
   [data-darkreader-mode] {
     /* Reset any Dark Reader modifications that might cause hydration issues */
     all: unset;
+  }
+}
+
+/* Added modern animation utilities and smooth transitions */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.7s ease-out forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.7s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out forwards;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 3s;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulseSubtle 3s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .transition-bounce {
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .glass-effect {
+    backdrop-filter: blur(12px);
+    background: oklch(1 0 0 / 0.8);
+    border: 1px solid oklch(0.9 0 0 / 0.3);
+  }
+
+  .dark .glass-effect {
+    background: oklch(0.05 0 0 / 0.8);
+    border: 1px solid oklch(0.2 0 0 / 0.3);
+  }
+
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px oklch(0.1 0 0 / 0.08);
+  }
+
+  .dark .hover-lift:hover {
+    box-shadow: 0 8px 25px oklch(0.05 0 0 / 0.15);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, oklch(0.1 0 0), oklch(0.4 0 0));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .dark .text-gradient {
+    background: linear-gradient(135deg, oklch(0.95 0 0), oklch(0.7 0 0));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Added modern keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulseSubtle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 20px oklch(0.1 0 0 / 0.1);
+  }
+  to {
+    box-shadow: 0 0 30px oklch(0.1 0 0 / 0.2);
+  }
+}
+
+@keyframes glowDark {
+  from {
+    box-shadow: 0 0 20px oklch(0.95 0 0 / 0.1);
+  }
+  to {
+    box-shadow: 0 0 30px oklch(0.95 0 0 / 0.2);
   }
 }

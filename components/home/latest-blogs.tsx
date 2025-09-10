@@ -48,40 +48,49 @@ export function LatestBlogs() {
 
   if (loading) {
     return (
-      <section className="py-16 px-4 bg-muted/20">
+      <section className="py-16 px-4 bg-muted/10">
         <div className="container mx-auto">
-          <div className="flex justify-center">Loading latest blogs...</div>
+          <div className="flex justify-center items-center space-x-2">
+            <div className="animate-pulse-subtle">Loading latest blogs...</div>
+          </div>
         </div>
       </section>
     )
   }
 
   return (
-    <section className="py-16 px-4 bg-muted/20">
+    <section className="py-16 px-4 bg-muted/10">
       <div className="container mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 animate-fade-in">
           <div className="flex items-center gap-3">
-            <Clock className="w-6 h-6 text-primary" />
-            <h2 className="text-3xl font-bold">Latest Posts</h2>
+            <Clock className="w-6 h-6 text-foreground animate-float" />
+            <h2 className="text-3xl font-bold text-foreground text-gradient">Latest Posts</h2>
           </div>
           <Link href="/blogs">
-            <Button variant="outline" className="flex items-center gap-2 bg-transparent">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2 bg-transparent border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-smooth hover-lift rounded-lg group"
+            >
               View All
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 transition-smooth group-hover:translate-x-1" />
             </Button>
           </Link>
         </div>
 
         {blogs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.map((blog) => (
-              <BlogCard key={blog._id} blog={blog} />
+            {blogs.map((blog, index) => (
+              <div key={blog._id} className="animate-slide-up hover-lift" style={{ animationDelay: `${index * 0.1}s` }}>
+                <BlogCard blog={blog} />
+              </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <Clock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">No blogs published yet</h3>
+          <div className="text-center py-12 animate-fade-in">
+            <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-subtle">
+              <Clock className="w-8 h-8 text-accent-foreground" />
+            </div>
+            <h3 className="text-lg font-medium mb-2 text-foreground">No blogs published yet</h3>
             <p className="text-muted-foreground">Be the first to share your knowledge!</p>
           </div>
         )}

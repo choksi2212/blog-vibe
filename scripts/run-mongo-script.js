@@ -34,4 +34,3 @@ try {
   console.error('Failed running mongosh:', e.message)
   process.exit(1)
 }
-

@@ -46,4 +46,3 @@ print(`✅ Ensured user ${uidFromArg} has role=admin`)
 
 const doc = dbRef.users.findOne({ uid: uidFromArg })
 printjson(doc)
-
