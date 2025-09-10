@@ -68,26 +68,46 @@ export function SignupForm() {
   const handleGoogleSignup = async () => {
     setLoading(true)
     try {
-      const userCredential = await signInWithPopup(auth, googleProvider)
+      let userCredential: any
+      try {
+        userCredential = await signInWithPopup(auth, googleProvider)
+      } catch (popupErr: any) {
+        if (popupErr?.code === 'auth/popup-blocked' || popupErr?.code === 'auth/popup-closed-by-user') {
+          const { signInWithRedirect } = await import('firebase/auth')
+          await signInWithRedirect(auth, googleProvider)
+          return
+        }
+        throw popupErr
+      }
 
       // Create user profile in database
-      await fetch("/api/auth/register", {
+      const idToken = await userCredential.user.getIdToken()
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${await userCredential.user.getIdToken()}`,
+          Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify({
           email: userCredential.user.email,
           uid: userCredential.user.uid,
         }),
       })
+      if (!res.ok) {
+        let msg = "Registration failed"
+        try {
+          const data = await res.json()
+          msg = data?.error || JSON.stringify(data)
+        } catch {}
+        throw new Error(msg)
+      }
 
       toast({
         title: "Success",
         description: "Account created with Google successfully!",
       })
-      router.push("/")
+      router.replace("/")
+      setTimeout(() => { if (typeof window !== 'undefined') window.location.href = "/" }, 100)
     } catch (error: any) {
       if (error.code === 'auth/popup-closed-by-user') {
         // User closed the popup - don't show error
