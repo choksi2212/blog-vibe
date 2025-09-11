@@ -59,12 +59,11 @@ export async function POST(request: NextRequest) {
 
     await db.collection("users").insertOne(newUser)
 
+    // Trigger welcome email via internal API (previous behavior)
     try {
-      await fetch(`${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/notifications/welcome`, {
+      await fetch(`${process.env.NEXTAUTH_URL || "https://blog-vibe-wine.vercel.app"}/api/notifications/welcome`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
           userName: newUser.profile.displayName,

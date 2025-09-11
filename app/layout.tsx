@@ -11,7 +11,12 @@ import { Suspense } from "react"
 export const metadata: Metadata = {
   title: "Devnovate Blog",
   description: "A minimalistic blogging platform for developers",
-  generator: "v0.app",
+  generator: "Manas Choksi",
+  icons: {
+    icon: "/favicon.png",   // normal browser favicon
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",  // for iOS/Apple devices
+  },
 }
 
 export default function RootLayout({
