@@ -20,12 +20,14 @@ export function LoginForm() {
   const router = useRouter()
 
 
+
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
     try {
-      await signInWithEmailAndPassword(auth, email, password)
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      
       toast({
         title: "Success",
         description: "Logged in successfully!",
@@ -45,7 +47,8 @@ export function LoginForm() {
   const handleGoogleLogin = async () => {
     setLoading(true)
     try {
-      await signInWithPopup(auth, googleProvider)
+      const result = await signInWithPopup(auth, googleProvider)
+      
       toast({ title: "Success", description: "Logged in with Google successfully!" })
       router.push("/")
     } catch (error: any) {
@@ -67,6 +70,7 @@ export function LoginForm() {
       setLoading(false)
     }
   }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-8">
