@@ -50,12 +50,17 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       await db.collection("blogs").updateOne({ _id: new ObjectId(id) }, { $inc: { views: 1 } })
     }
 
-    return NextResponse.json({ blog: blogWithAuthor }, {
-      headers: {
-        // small cache to reduce load while staying fresh in dev
-        "Cache-Control": "s-maxage=60, stale-while-revalidate=300",
+    return NextResponse.json(
+      { blog: blogWithAuthor },
+      {
+        headers: {
+          // Disable caching so likes/comments reflect immediately across devices
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
       },
-    })
+    )
   } catch (error) {
     console.error("Blog fetch error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
